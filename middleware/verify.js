@@ -1,0 +1,41 @@
+const jwt = require('jsonwebtoken')
+
+const { ACCESS_TOKEN } = require('../configuration/config')
+const userModel = require('../models/userModel')
+
+const verifyUser = async (request, response, next) => {
+    try {
+        console.log(request.headers)
+        const authHeader = request.headers['cookie']
+
+        if(!authHeader) {
+            return response.status(401).send({ message: 'Token not found'})
+
+        }
+
+        const cookie = authHeader.split('=')[1]
+
+        console.log(cookie)
+        
+        jwt.verify(cookie, ACCESS_TOKEN, async (error, decode) => {
+            if(error) {
+                return response.status(401).send({ message: 'Session Expired'})
+            }
+
+            const { id } = decode
+            const existingUser = await userModel.find(
+                { _id: id}
+            )
+            request.user = existingUser 
+            next()
+            
+        })
+    }
+    catch(error) {
+        response.status(500).send({ message: error.message })
+    }
+}
+
+module.exports = {
+    verifyUser
+}
