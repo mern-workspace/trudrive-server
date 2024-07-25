@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema(
         },
         tenantId: {
             type: String,
+            select: false,
             required: function() {
                 return this.role === "user"
             }

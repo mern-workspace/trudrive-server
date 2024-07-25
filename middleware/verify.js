@@ -14,8 +14,6 @@ const verifyUser = async (request, response, next) => {
         }
 
         const cookie = authHeader.split('=')[1]
-
-        console.log(cookie)
         
         jwt.verify(cookie, ACCESS_TOKEN, async (error, decode) => {
             if(error) {
@@ -25,8 +23,9 @@ const verifyUser = async (request, response, next) => {
             const { id } = decode
             const existingUser = await userModel.find(
                 { _id: id}
-            )
+            ).select('+tenantId')
             request.user = existingUser 
+            console.log(existingUser)
             next()
             
         })
