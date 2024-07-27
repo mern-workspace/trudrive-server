@@ -5,7 +5,6 @@ const userModel = require('../models/userModel')
 
 const verifyUser = async (request, response, next) => {
     try {
-        console.log(request.headers)
         const authHeader = request.headers['cookie']
 
         if(!authHeader) {
@@ -25,7 +24,6 @@ const verifyUser = async (request, response, next) => {
                 { _id: id}
             ).select('+tenantId')
             request.user = existingUser 
-            console.log(existingUser)
             next()
             
         })

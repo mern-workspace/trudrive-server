@@ -10,6 +10,7 @@ const connect = require('./database/connection')
 
 const userRouter = require('./routes/userRoute')
 const adminRouter = require('./routes/adminRoute')
+const directoryRouter = require('./routes/directoryRoute')
 
 
 app.use(morgan('tiny'))
@@ -24,6 +25,7 @@ app.get('/', (request, response) => {
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/admin', adminRouter)
+app.use('/api/v1/folders', directoryRouter)
 
 connect()
     .then(() => {

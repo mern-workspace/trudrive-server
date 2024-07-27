@@ -57,9 +57,14 @@ const createDirectorySchema = (tenantId) => {
 }
 
 const directoryModel = (tenantId) => {
-    const schema = createDirectorySchema(tenantId)
+    const collectionName = `${tenantId}_directories`;
 
-    return mongoose.model(`${tenantId}_directories`, schema)
+    if (mongoose.models[collectionName]) {
+        return mongoose.models[collectionName];
+    }
+
+    const schema = createDirectorySchema(tenantId);
+    return mongoose.model(collectionName, schema);
 }
 
 module.exports = directoryModel
