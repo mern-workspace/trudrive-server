@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { verifyUser } = require('../middleware/verify')
-const { createChildDirectory } = require('../controllers/directoryController')
+const { createChildDirectory, getAllFilesAndDirectoriesOfParticularDirectory } = require('../controllers/directoryController')
 
 
 // To Create Child Directory 
@@ -12,6 +12,15 @@ router.post(
     verifyUser,
 
     createChildDirectory
+)
+
+// To get all files and directories from home
+router.get(
+    '/:parentDirectory',
+
+    verifyUser,
+
+    getAllFilesAndDirectoriesOfParticularDirectory
 )
 
 module.exports = router

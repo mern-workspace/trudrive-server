@@ -1,4 +1,6 @@
 const { init } = require('@paralleldrive/cuid2')
+// const mongoose = require('mongoose')
+// const { ObjectId } = mongoose.Types
 
 const directoryModel = require('../models/directoryModel')
 
@@ -62,7 +64,43 @@ const createChildDirectory = async (request, response) => {
     }
 }
 
+const getAllFilesAndDirectoriesOfParticularDirectory = async (request, response) => {
+    const user = request.user
+    const parentDirectoryUrlId = request.params.parentDirectory
+    try{
+
+        const directory = directoryModel(user.tenantId)
+        
+        const parentDirectoryQuery = parentDirectoryUrlId == 'home' 
+            ? { name: 'root'}
+            : {urlId: parentDirectoryUrlId}
+
+        const parentDirectory = await directory.findOne(parentDirectoryQuery)
+
+        console.log(parentDirectory._id)
+
+        const directories = await directory.aggregate(
+            [
+                {
+                    // $match: mongoose.Types.ObjectId(parentDirectory._id)
+                    $match: {
+                        parentDirectory: parentDirectory._id
+                    }
+                }
+            ]
+        )
+
+        response.status(200).send({ message: "Data fetched", directories: directories})
+
+    }
+    catch(error) {
+        response.status(500).send({ message: error.message})
+    }
+}
+
 module.exports = {
     createRootDirectory,
-    createChildDirectory
+    createChildDirectory,
+
+    getAllFilesAndDirectoriesOfParticularDirectory
 }
