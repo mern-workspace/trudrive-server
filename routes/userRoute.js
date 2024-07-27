@@ -5,6 +5,7 @@ const { check } = require('express-validator')
 const { signup, login } = require('../controllers/authController')
 const { verifyUser } = require('../middleware/verify')
 const { authenticateUser } = require('../controllers/userController')
+const upload = require('../middleware/upload')
 
 // Signup route
 router.post(
@@ -57,6 +58,16 @@ router.get(
     verifyUser,
 
     authenticateUser
+)
+
+router.post(
+    '/add',
+    verifyUser,
+    upload.single('image'),
+    (request, response) => {
+        console.log(request.file)
+        response.send("done")
+    }
 )
 
 module.exports = router

@@ -21,7 +21,7 @@ const verifyUser = async (request, response, next) => {
             }
 
             const { id } = decode
-            const existingUser = await userModel.find(
+            const existingUser = await userModel.findOne(
                 { _id: id}
             ).select('+tenantId')
             request.user = existingUser 
