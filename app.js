@@ -13,8 +13,13 @@ const adminRouter = require('./routes/adminRoute')
 const directoryRouter = require('./routes/directoryRoute')
 
 
+app.use(cors(
+    {
+        origin: 'http://localhost:5173',
+        credentials: true,
+    }
+))
 app.use(morgan('tiny'))
-app.use(cors())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: false}))
 app.use(express.json())
