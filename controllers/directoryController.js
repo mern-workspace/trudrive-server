@@ -77,8 +77,6 @@ const getAllFilesAndDirectoriesOfParticularDirectory = async (request, response)
 
         const parentDirectory = await directory.findOne(parentDirectoryQuery)
 
-        console.log(parentDirectory._id)
-
         const directories = await directory.aggregate(
             [
                 {
