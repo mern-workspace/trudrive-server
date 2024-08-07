@@ -71,9 +71,14 @@ const createFileSchema = (tenantId) => {
 }
 
 const fileModel = (tenantId) => {
-    const schema = createFileSchema(tenantId)
+    const collectionName = `${tenantId}_files`
 
-    return mongoose.model(`${tenantId}_files`, schema) 
+    if (mongoose.models[collectionName]) {
+        return mongoose.models[collectionName]
+    }
+
+    const schema = createFileSchema(tenantId)
+    return mongoose.model(collectionName, schema) 
 }
 
 module.exports = fileModel

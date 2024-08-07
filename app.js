@@ -11,6 +11,7 @@ const connect = require('./database/connection')
 const userRouter = require('./routes/userRoute')
 const adminRouter = require('./routes/adminRoute')
 const directoryRouter = require('./routes/directoryRoute')
+const fileRouter = require('./routes/fileRoute')
 
 
 app.use(cors(
@@ -31,6 +32,7 @@ app.get('/', (request, response) => {
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/admin', adminRouter)
 app.use('/api/v1/folders', directoryRouter)
+app.use('/api/v1/files', fileRouter)
 
 connect()
     .then(() => {
