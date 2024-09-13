@@ -12,6 +12,7 @@ const userRouter = require('./routes/userRoute')
 const adminRouter = require('./routes/adminRoute')
 const directoryRouter = require('./routes/directoryRoute')
 const fileRouter = require('./routes/fileRoute')
+const { connectToRedis } = require('./cache/connection')
 
 
 app.use(cors(
@@ -35,6 +36,14 @@ app.use('/api/v1/folders', directoryRouter)
 app.use('/api/v1/files', fileRouter)
 
 connect()
+    .then(() => {
+        try{
+            connectToRedis()
+        } 
+        catch(error) {
+            console.log(`Can't Connect to Redis : ${error}`)
+        }
+    })
     .then(() => {
         try{
             app.listen(PORT, console.log(`Server is running at http://localhost:${PORT}`))

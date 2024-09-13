@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 
 const { ACCESS_TOKEN } = require('../configuration/config')
 const userModel = require('../models/userModel')
+const { redisClient } = require('../cache/connection')
 
 const verifyUser = async (request, response, next) => {
     try {
@@ -20,6 +21,15 @@ const verifyUser = async (request, response, next) => {
             }
 
             const { id } = decode
+
+            // Check the id in redis 
+            const cacheUser = await redisClient.get(id)
+
+            if(cacheUser) {
+                request.user = JSON.parse(cacheUser)
+                return next()
+            }
+
             const existingUser = await userModel.findOne(
                 { _id: id}
             ).select('+tenantId')

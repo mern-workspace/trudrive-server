@@ -102,7 +102,7 @@ const getAllFilesAndDirectoriesOfParticularDirectory = async (request, response)
                 }
             ]
         ) 
-        console.log(files)
+
         response.status(200).send({ message: "Data fetched", directories: directories, files: files})
 
     }
