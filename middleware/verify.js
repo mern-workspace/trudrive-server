@@ -34,6 +34,9 @@ const verifyUser = async (request, response, next) => {
                 { _id: id}
             ).select('+tenantId')
             request.user = existingUser 
+
+            // set the data in redis
+            await redisClient.setEx(id, 60 * 20, JSON.stringify(existingUser));
             next()
             
         })
